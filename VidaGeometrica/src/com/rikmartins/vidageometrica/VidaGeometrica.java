@@ -38,6 +38,18 @@ public class VidaGeometrica implements ApplicationListener {
 				.toString());
 		TextureRegion[][] regioesTexturas = TextureRegion.split(texturas,
 				texturas.getWidth() / 4, texturas.getHeight() / 4);
+		for(TextureRegion[] trArray : regioesTexturas){
+			for(TextureRegion tr : trArray){
+				tr.getRegionHeight();
+				tr.getRegionWidth();
+				tr.getRegionX();
+				tr.getRegionY();
+				tr.getU();
+				tr.getV();
+				tr.getU2();
+				tr.getV2();
+			}
+		}
 		animadoCiano = new BlendedAnimation(0.025f, regioesTexturas[0]);
 		animadoCiano.setPlayMode(BlendedAnimation.LOOP);
 		animadoAmarelo = new BlendedAnimation(1f, regioesTexturas[1]);
@@ -65,7 +77,6 @@ public class VidaGeometrica implements ApplicationListener {
 
 		stateTime += Gdx.graphics.getDeltaTime();
 
-
 		inanimadoVerde.setSize(0.5f, 0.5f);
 		inanimadoVerde.setPosition(-inanimadoVerde.getWidth() / 2,
 				-inanimadoVerde.getHeight() / 2);
@@ -78,7 +89,7 @@ public class VidaGeometrica implements ApplicationListener {
 		lote.begin();
 		// inanimadoVerde.draw(lote);
 		for (TransformedTextureRegion ttr : currentFrame) {
-			lote.setColor(1f, 1f, 1f, ttr.getAlpha());
+			lote.setColor(0f, 1f, 0f, ttr.getAlpha());
 			lote.draw(ttr.getTheTextureRegion(), -0.5f, -0.5f, 1f, 1f);
 		}
 		lote.end();
