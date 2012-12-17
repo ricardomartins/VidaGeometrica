@@ -13,13 +13,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.rikmartins.libgdxext.BlendedAnimation;
 import com.rikmartins.libgdxext.BlendedAnimation.TransformedTextureRegion;
+import com.rikmartins.libgdxext.ExtendedAnimation;
+import com.rikmartins.libgdxext.Frame;
 
 public class VidaGeometrica implements ApplicationListener {
 	private Texture texturas;
 	private SpriteBatch lote;
-	private BlendedAnimation animadoCiano;
-	private BlendedAnimation animadoAmarelo;
-	private BlendedAnimation animadoBranco;
+	private ExtendedAnimation animadoCiano;
+	private ExtendedAnimation animadoAmarelo;
+	private ExtendedAnimation animadoBranco;
 	private Sprite inanimadoCastanho;
 	private Sprite inanimadoVerde;
 
@@ -38,23 +40,18 @@ public class VidaGeometrica implements ApplicationListener {
 				.toString());
 		TextureRegion[][] regioesTexturas = TextureRegion.split(texturas,
 				texturas.getWidth() / 4, texturas.getHeight() / 4);
-		for(TextureRegion[] trArray : regioesTexturas){
-			for(TextureRegion tr : trArray){
-				tr.getRegionHeight();
-				tr.getRegionWidth();
-				tr.getRegionX();
-				tr.getRegionY();
-				tr.getU();
-				tr.getV();
-				tr.getU2();
-				tr.getV2();
+		Frame[][] sprites = new Frame[regioesTexturas.length][regioesTexturas[0].length];
+		for(int tri = 0; tri < regioesTexturas.length ; tri++){ //TextureRegion[] trArray : regioesTexturas){
+			TextureRegion[] trArray = regioesTexturas[tri];
+			for(int trj = 0; trj < trArray.length; trj++){
+				sprites[tri][trj] = new Frame(trArray[trj]);
 			}
 		}
-		animadoCiano = new BlendedAnimation(0.025f, regioesTexturas[0]);
+		animadoCiano = new ExtendedAnimation(0.025f, sprites[0]);
 		animadoCiano.setPlayMode(BlendedAnimation.LOOP);
-		animadoAmarelo = new BlendedAnimation(1f, regioesTexturas[1]);
+		animadoAmarelo = new ExtendedAnimation(1f, sprites[1]);
 		animadoAmarelo.setPlayMode(BlendedAnimation.LOOP);
-		animadoBranco = new BlendedAnimation(1f, regioesTexturas[2]);
+		animadoBranco = new ExtendedAnimation(1f, sprites[2]);
 		animadoBranco.setPlayMode(BlendedAnimation.LOOP);
 		inanimadoCastanho = new Sprite(regioesTexturas[3][0]);
 		inanimadoVerde = new Sprite(regioesTexturas[3][1]);
@@ -77,21 +74,23 @@ public class VidaGeometrica implements ApplicationListener {
 
 		stateTime += Gdx.graphics.getDeltaTime();
 
+		Sprite ciano = animadoCiano.getKeyFrame(stateTime * 0, true);
+		ciano.setSize(0.5f, 0.5f);
+		//ciano.setPosition(-ciano.getWidth() / 2,
+		//		-ciano.getHeight() / 2);
+		// ciano.setRotation(stateTime);
+
+		
 		inanimadoVerde.setSize(0.5f, 0.5f);
 		inanimadoVerde.setPosition(-inanimadoVerde.getWidth() / 2,
 				-inanimadoVerde.getHeight() / 2);
 
-		List<TransformedTextureRegion> currentFrame = animadoBranco
-				.getBlendedKeyFrames(stateTime, true);
-
 		lote.setProjectionMatrix(camara.combined);
 		lote.setBlendFunction(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+
 		lote.begin();
-		// inanimadoVerde.draw(lote);
-		for (TransformedTextureRegion ttr : currentFrame) {
-			lote.setColor(0f, 1f, 0f, ttr.getAlpha());
-			lote.draw(ttr.getTheTextureRegion(), -0.5f, -0.5f, 1f, 1f);
-		}
+		ciano.draw(lote);
+		// inanimadoCastanho.draw(lote);
 		lote.end();
 	}
 
