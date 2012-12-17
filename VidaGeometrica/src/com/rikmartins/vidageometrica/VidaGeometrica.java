@@ -74,7 +74,7 @@ public class VidaGeometrica implements ApplicationListener {
 
 		stateTime += Gdx.graphics.getDeltaTime();
 
-		Sprite ciano = animadoCiano.getKeyFrame(stateTime * 0, true);
+		Sprite ciano = animadoCiano.getKeyFrame(stateTime, true);
 		ciano.setSize(0.5f, 0.5f);
 		//ciano.setPosition(-ciano.getWidth() / 2,
 		//		-ciano.getHeight() / 2);
